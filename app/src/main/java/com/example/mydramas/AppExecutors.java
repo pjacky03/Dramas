@@ -9,12 +9,30 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class AppExecutors {
+    //==============================
+    // Type
+    //==============================
+    private static class MainThreadExecutor implements Executor {
+        private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
+
+        @Override
+        public void execute(@NonNull Runnable command) {
+            mainThreadHandler.post(command);
+        }
+    }
+
+    //==============================
+    // Member Fields
+    //==============================
     private final Executor mDiskIO;
 
     private final Executor mNetworkIO;
 
     private final Executor mMainThread;
 
+    //==============================
+    // Constructors
+    //==============================
     private AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
         this.mDiskIO = diskIO;
         this.mNetworkIO = networkIO;
@@ -27,6 +45,9 @@ public class AppExecutors {
                 , new MainThreadExecutor());
     }
 
+    //==============================
+    // Member Methods
+    //==============================
     public Executor diskIO() {
         return mDiskIO;
     }
@@ -37,14 +58,5 @@ public class AppExecutors {
 
     public Executor mainThread() {
         return mMainThread;
-    }
-
-    private static class MainThreadExecutor implements Executor {
-        private Handler mainThreadHandler = new Handler(Looper.getMainLooper());
-
-        @Override
-        public void execute(@NonNull Runnable command) {
-            mainThreadHandler.post(command);
-        }
     }
 }

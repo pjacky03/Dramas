@@ -2,6 +2,7 @@ package com.example.mydramas.repository.network;
 
 import com.google.gson.annotations.SerializedName;
 
+// Each drama item in json file.
 public class DramaRemote {
 
     @SerializedName("drama_id")

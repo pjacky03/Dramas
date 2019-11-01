@@ -7,6 +7,7 @@ import androidx.room.Query;
 
 import java.util.List;
 
+// Room format for data access object
 @Dao
 public interface DramaDao {
     @Query("SELECT * FROM dramas LIMIT 50")

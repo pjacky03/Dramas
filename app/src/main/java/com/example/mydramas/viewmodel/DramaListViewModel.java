@@ -31,18 +31,26 @@ public class DramaListViewModel extends AndroidViewModel {
     //==============================
     // Member Methods
     //==============================
+    // Put message to background thread, get data from local database, and then update live data.
+    // Return the live data of drama. Update the live data if find the drama with dramaId.
     @NonNull
     @MainThread
     public LiveData<DramaEntity> postLoadDeepLinkDramaFromDB(final int dramaId) {
         return mRepository.postLoadDeepLinkDramaFromDB(dramaId);
     }
 
+    // Put message to background thread, get data from local database, and then update live datas.
+    // Return the live data of drama list. Update live data if find the drama list in which the
+    // name of each dramas include keyword.
     @NonNull
     @MainThread
     public LiveData<List<DramaEntity>> postLoadDramasFromDB(final String keyword) {
         return mRepository.postLoadDramasFromDB(keyword);
     }
 
+    // Put message to background thread, get data from server, and then update live data.
+    // Return the live data of the updating time of network data. Update the live data after
+    // querying data from network.
     @NonNull
     @MainThread
     public LiveData<Long> postLoadDramasFromServer() {

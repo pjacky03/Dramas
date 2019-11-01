@@ -3,6 +3,7 @@ package com.example.mydramas.repository.network;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+// Retrofit: The service to get data
 public class DramaRetrofitManager {
     //==============================
     // Static Fields

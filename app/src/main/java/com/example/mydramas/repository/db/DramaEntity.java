@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
+// Room format for data entity
 @Entity(tableName = "dramas")
 public class DramaEntity {
     @PrimaryKey

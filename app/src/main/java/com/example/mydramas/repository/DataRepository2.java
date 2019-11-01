@@ -73,6 +73,9 @@ public class DataRepository2 {
         return mObservableDramas;
     }
 
+    // Put message to background thread, get data from local database, and then update live datas.
+    // Return the live data of drama list. Update live data if find the drama list in which the
+    // name of each dramas include keyword.
     public LiveData<List<DramaEntity>> postLoadDramasFromDB(final String keyword) {
         mAppExecutors.diskIO().execute(
                 new Runnable() {
@@ -81,6 +84,7 @@ public class DataRepository2 {
                         List<DramaEntity> dramas = TextUtils.isEmpty(keyword)
                                 ? mDatabase.dramaDao().loadAllDramas()
                                 : mDatabase.dramaDao().loadDramasWithKeyword(keyword);
+                        // Inform the live data update
                         mObservableDramas.postValue(dramas);
                     }
                 }
@@ -88,6 +92,9 @@ public class DataRepository2 {
         return mObservableDramas;
     }
 
+    // Put message to background thread, get data from server, and then update live data.
+    // Return the live data of the updating time of network data. Update the live data after
+    // querying data from network.
     public MutableLiveData<Long> postLoadDramasFromServer() {
         mAppExecutors.networkIO().execute(
                 new Runnable() {
@@ -103,10 +110,14 @@ public class DataRepository2 {
                                 List<DramaRemote> dramaRemotes = response.body().getDramaRemote();
                                 List<DramaEntity> dramaEntities = new ArrayList<DramaEntity>();
                                 DataConverter.DramaRemoteToDramaEntity(dramaRemotes, dramaEntities);
+
+                                // Update DB data
                                 mDatabase.dramaDao().insertAll(dramaEntities);
+
+                                // Inform the live data update
                                 mObservableNetworkDataUpdateTime.postValue(System.currentTimeMillis());
                             } else {
-                                Log.w(TAG, "LoadDramasFromServerWorker: Connection Fail");
+                                Log.d(TAG, "LoadDramasFromServerWorker: Connection Fail");
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -117,6 +128,8 @@ public class DataRepository2 {
         return mObservableNetworkDataUpdateTime;
     }
 
+    // Put message to background thread, get data from local database, and then update live data.
+    // Return the live data of drama. Update the live data if find the drama with dramaId.
     public LiveData<DramaEntity> postLoadDeepLinkDramaFromDB(final int dramaId) {
         mAppExecutors.diskIO().execute(
                 new Runnable() {
@@ -124,8 +137,9 @@ public class DataRepository2 {
                     public void run() {
                         List<DramaEntity> dramas = mDatabase.dramaDao().loadDramasWithDramaId(dramaId);
                         if (dramas.size() > 0) {
-                            Log.w(TAG, "LoadDeepLinkDramaFromDB: dramaId="+dramas.get(0).dramaId);
+                            Log.d(TAG, "LoadDeepLinkDramaFromDB: dramaId="+dramas.get(0).dramaId);
 
+                            // Inform the live data update
                             mObservableDeepLinkDrama.postValue(dramas.get(0));
                         }
                     }

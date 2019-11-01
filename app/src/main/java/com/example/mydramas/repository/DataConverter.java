@@ -22,6 +22,7 @@ public class DataConverter {
     //==============================
     // Static Methods
     //==============================
+    // Translate newwork data format to local DB data format.
     public static void DramaRemoteToDramaEntity(@NonNull List<DramaRemote> dramaRemotes, @NonNull List<DramaEntity> dramaEntities) {
         dramaEntities.clear();
 
@@ -37,6 +38,8 @@ public class DataConverter {
         }
     }
 
+    // Translate GMT time to local time.
+    // Return local time.
     public static String DateReferenceTimeZone(String gmt) {
         String localtime = gmt;
         try {

@@ -6,6 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+// Local database for dramas
 @Database(entities = {DramaEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     //==============================
